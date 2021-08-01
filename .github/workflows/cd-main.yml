@@ -1,0 +1,41 @@
+# cd-main は本番環境へのデプロイを行います。
+# タイミングは main ブランチへの push です。
+
+name: cd github pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  deploy-to-github-pages:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    # ここが @v1 だったり node-version: '10.x' だったりすると
+    # The engine "node" is incompatible with this module. エラーが発生して Actions が動かない。
+    - uses: actions/setup-node@v2
+      with:
+        node-version: 16.x
+
+    - uses: actions/cache@v2
+      id: node_modules_cache_id
+      with:
+        path: |
+          node_modules
+        key: node-v16.x-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
+
+    - run: yarn install
+
+    - run: yarn build:production
+
+    - uses: peaceiris/actions-gh-pages@v3
+      with:
+        personal_token: ${{ secrets.PERSONAL_TOKEN }}
+        publish_dir: ./dist
+        # NOTE: カスタムドメインで運用するときは必要です。
+        # cname: ${{ secrets.CUSTOM_DOMAIN_FOR_THIS_REPOSITORY }}
