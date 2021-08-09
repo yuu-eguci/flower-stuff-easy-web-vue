@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["prediction"],{7742:function(n,e,t){"use strict";t.r(e);var i=function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("div")},c=[],o={name:"PredictionView",components:{}},r=o,l=t("2877"),s=Object(l["a"])(r,i,c,!1,null,null,null);e["default"]=s.exports}}]);
+//# sourceMappingURL=prediction.4f3ffc25.js.map
