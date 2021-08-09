@@ -14,11 +14,6 @@ const routes = [
     path: '/media',
     name: 'MediaView',
     component: () => import(/* webpackChunkName: "media" */ '../views/MediaView.vue')
-  },
-  {
-    path: '/prediction',
-    name: 'PredictionView',
-    component: () => import(/* webpackChunkName: "prediction" */ '../views/PredictionView.vue')
   }
 ]
 
