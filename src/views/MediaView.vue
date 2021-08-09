@@ -1,56 +1,64 @@
 <template>
   <div>
-    <!--
-      カメラ映像を流す video 要素です。
-      NOTE: autoplay playsinline は iOS で動作させるため必要です。
-            webkit style は左右反転表示です。
-    -->
-    <video
-      v-if="modalStream"
-      ref="video"
-      :srcObject.prop="modalStream"
-      autoplay
-      playsinline
-      class="w-100"
-      style="-webkit-transform: scaleX(-1)"
-    />
-    <b-icon
-      v-else
-      icon="camera-video"
-      animation="cylon-vertical"
-      font-scale="2"
-    />
     <div
-      class="m-3"
-    >
-      <b-button
-        variant="primary"
-        block
-        :disabled="loading"
-        @click="onClickPredictButton"
-      >
-        <b-icon
-          v-if="loading"
-          icon="arrow-clockwise"
-          animation="spin"
-        />
-        <b-icon
-          v-else
-          icon="cloud-upload"
-        />
-        Predict
-      </b-button>
-    </div>
-    <b-alert
-      show
-      class="m-3"
+      v-if="!showCollapseCamera"
+      class="text-center"
     >
       <b-icon
-        icon="hand-index"
+        icon="camera-video"
+        animation="cylon"
+        font-scale="2"
       />
-      Capture a flower on the camera. Then tap the Predict button.
-      The photos will be sent to the server, but won't be saved.
-    </b-alert>
+      Starting...
+    </div>
+    <b-collapse
+      v-model="showCollapseCamera"
+    >
+      <!--
+        カメラ映像を流す video 要素です。
+        NOTE: autoplay playsinline は iOS で動作させるため必要です。
+              webkit style は左右反転表示です。
+      -->
+      <video
+        ref="video"
+        :srcObject.prop="modalStream"
+        autoplay
+        playsinline
+        class="w-100"
+        style="-webkit-transform: scaleX(-1)"
+      />
+      <div
+        class="m-3"
+      >
+        <b-button
+          variant="primary"
+          block
+          :disabled="loading"
+          @click="onClickPredictButton"
+        >
+          <b-icon
+            v-if="loading"
+            icon="arrow-clockwise"
+            animation="spin"
+          />
+          <b-icon
+            v-else
+            icon="cloud-upload"
+          />
+          Predict
+        </b-button>
+      </div>
+      <b-alert
+        show
+        class="m-3"
+      >
+        <b-icon
+          icon="hand-index"
+        />
+        Capture a flower on the camera. Then tap the Predict button.
+        The photos will be sent to the server, but won't be saved.
+      </b-alert>
+    </b-collapse>
     <b-card
       no-body
       class="m-3 p-3"
@@ -74,7 +82,8 @@ export default {
   data () {
     return {
       modalStream: null,
-      loading: false
+      loading: false,
+      showCollapseCamera: false
     }
   },
   // NOTE: 定数のように利用する変数、 props から算出できる値は computed に定義するよう心がけます。
@@ -110,6 +119,9 @@ export default {
           facingMode: 'environment' // user: front camera, environment: rear camera
         }
       })
+      setTimeout(() => {
+        this.showCollapseCamera = true
+      }, 3000)
     } catch (err) {
       console.info({ err })
     }
@@ -124,6 +136,7 @@ export default {
     },
     onClickTestButton: async function () {
       console.info('test')
+      this.showCollapseCamera = !this.showCollapseCamera
     }
   }
 }
