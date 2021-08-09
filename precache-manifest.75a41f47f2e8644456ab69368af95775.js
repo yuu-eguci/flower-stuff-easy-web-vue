@@ -4,24 +4,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/flower-stuff-lab-easy-web/css/chunk-vendors.85f48eb3.css"
   },
   {
-    "revision": "7d8f100981bb5a2d7ba5434788b0440d",
+    "revision": "60500565ec46aaff812e8b27c802b7fb",
     "url": "/flower-stuff-lab-easy-web/index.html"
   },
   {
-    "revision": "4b2dd0adc70d3938c9cd",
-    "url": "/flower-stuff-lab-easy-web/js/app.7b9a843d.js"
+    "revision": "dc75476bd08ef2d782a1",
+    "url": "/flower-stuff-lab-easy-web/js/app.a8f2c99f.js"
   },
   {
     "revision": "f2d3346c3b4f78962fac",
     "url": "/flower-stuff-lab-easy-web/js/chunk-vendors.d43536b0.js"
   },
   {
-    "revision": "9ae01825e25986c8463b",
-    "url": "/flower-stuff-lab-easy-web/js/media.61ef91c9.js"
-  },
-  {
-    "revision": "d98e94bcbe0a892e319d",
-    "url": "/flower-stuff-lab-easy-web/js/prediction.4f3ffc25.js"
+    "revision": "bde6eb4a952db5b035bd",
+    "url": "/flower-stuff-lab-easy-web/js/media.3703856d.js"
   },
   {
     "revision": "86c7c7d81cc0f24fae5a987aae29a1d7",

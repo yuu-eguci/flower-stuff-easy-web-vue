@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["media"],{"21a9":function(e,n,t){"use strict";t.r(n);var a=function(){var e=this,n=e.$createElement,t=e._self._c||n;return t("div")},i=[],c={name:"MediaView",components:{}},l=c,o=t("2877"),s=Object(o["a"])(l,a,i,!1,null,null,null);n["default"]=s.exports}}]);
-//# sourceMappingURL=media.61ef91c9.js.map
