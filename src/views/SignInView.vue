@@ -69,6 +69,7 @@ export default {
     }
   },
   async mounted () {
+    // TODO: Heroku にせよ App Service にせよ、一度疎通確認をする。
   },
   // NOTE: 「methods に含めるのは template から利用する method のみ」原則を心がけます。
   methods: {
