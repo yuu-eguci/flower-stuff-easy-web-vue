@@ -80,34 +80,13 @@
         title="Prediction result"
       >
         <b-list-group flush>
-          <b-list-group-item>
-            {{ predictionResult0Name }}: {{ predictionResult0Confidence }}<br>
+          <b-list-group-item
+            v-for="result in predictionResults"
+            :key="result.id"
+          >
+            {{ result.name }}: {{ result.confidence }}<br>
             <b-link
-              :href="`https://www.google.com/search?q=${predictionResult0Name}+flower&tbm=isch`"
-              target="_blank"
-            >
-              <b-icon
-                icon="search"
-              />
-              (Google)
-            </b-link>
-          </b-list-group-item>
-          <b-list-group-item>
-            {{ predictionResult1Name }}: {{ predictionResult1Confidence }}<br>
-            <b-link
-              :href="`https://www.google.com/search?q=${predictionResult1Name}+flower&tbm=isch`"
-              target="_blank"
-            >
-              <b-icon
-                icon="search"
-              />
-              (Google)
-            </b-link>
-          </b-list-group-item>
-          <b-list-group-item>
-            {{ predictionResult2Name }}: {{ predictionResult2Confidence }}<br>
-            <b-link
-              :href="`https://www.google.com/search?q=${predictionResult2Name}+flower&tbm=isch`"
+              :href="`https://www.google.com/search?q=${result.name}+flower&tbm=isch`"
               target="_blank"
             >
               <b-icon
@@ -117,6 +96,19 @@
             </b-link>
           </b-list-group-item>
         </b-list-group>
+        <div>
+          <b-button
+            variant="primary"
+            block
+            class="mt-3"
+            @click="onClickBackButton"
+          >
+            <b-icon
+              icon="camera-video"
+            />
+            Back to camera
+          </b-button>
+        </div>
       </b-card>
     </b-collapse>
     <b-card
@@ -214,12 +206,7 @@ export default {
       showCollapseCamera: false,
       showCollapsePredictionResult: false,
       imgSrcBase64: '',
-      predictionResult0Name: '',
-      predictionResult0Confidence: '',
-      predictionResult1Name: '',
-      predictionResult1Confidence: '',
-      predictionResult2Name: '',
-      predictionResult2Confidence: ''
+      predictionResults: []
     }
   },
   // NOTE: 定数のように利用する変数、 props から算出できる値は computed に定義するよう心がけます。
@@ -265,21 +252,27 @@ export default {
         ],
         otherParameter: 'foo'
       }
-      this.predictionResult0Name = predictionResult.result[0].name
-      this.predictionResult1Name = predictionResult.result[1].name
-      this.predictionResult2Name = predictionResult.result[2].name
-      this.predictionResult0Confidence = predictionResult.result[0].confidence
-      this.predictionResult1Confidence = predictionResult.result[1].confidence
-      this.predictionResult2Confidence = predictionResult.result[2].confidence
+      this.predictionResults = predictionResult.result
 
       setTimeout(() => {
         this.showCollapseCameraOverlay = false
         // カメラ停止、カメラエリアを閉じて、予測結果エリアを開きます。
+        // FIXME: このときカメラが停止していない。
         stopStream(this.cameraStream)
         this.cameraStream = null
         this.showCollapseCamera = false
         this.showCollapsePredictionResult = true
       }, 5000)
+    },
+    onClickBackButton: async function () {
+      // 予測結果エリアの data 変数を初期化して、カメラエリアを再び開きます。
+      this.showCollapsePredictionResult = false
+      this.imgSrcBase64 = ''
+      this.predictionResults = []
+      this.cameraStream = await startStream()
+      setTimeout(() => {
+        this.showCollapseCamera = true
+      }, 3000)
     },
     onClickTestButton: async function () {
       console.info('test')
