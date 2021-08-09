@@ -33,16 +33,10 @@
         <b-button
           variant="primary"
           block
-          :disabled="loading"
+          :disabled="showCollapseCameraOverlay"
           @click="onClickPredictButton"
         >
           <b-icon
-            v-if="loading"
-            icon="arrow-clockwise"
-            animation="spin"
-          />
-          <b-icon
-            v-else
             icon="cloud-upload"
           />
           Predict
@@ -58,6 +52,23 @@
         Capture a flower on the camera. Then tap the Predict button.
         The photos will be sent to the server, but won't be saved.
       </b-alert>
+      <b-overlay
+        :show="showCollapseCameraOverlay"
+        no-wrap
+      >
+        <template #overlay>
+          <div class="text-center">
+            <b-icon
+              icon="cloud-upload"
+              scale="2"
+              animation="fade"
+            />
+          </div>
+          <div>
+            Sending and predicting ...
+          </div>
+        </template>
+      </b-overlay>
     </b-collapse>
     <b-card
       no-body
@@ -149,7 +160,7 @@ export default {
   data () {
     return {
       cameraStream: null,
-      loading: false,
+      showCollapseCameraOverlay: false,
       showCollapseCamera: false,
       predictionResult: null
     }
@@ -171,18 +182,18 @@ export default {
     this.cameraStream = stream
     setTimeout(() => {
       this.showCollapseCamera = true
-    }, 3000)
+    }, 2000)
   },
   // NOTE: 「methods に含めるのは template から利用する method のみ」原則を心がけます。
   methods: {
     onClickPredictButton: async function () {
-      this.loading = true
+      this.showCollapseCameraOverlay = true
 
       // 画像を base64 で取得します。
       const base64Image = getVideoFrameAsBase64(this.$refs.video)
       // 画像が存在しなければ処理を続ける理由はありません。
       if (!base64Image) {
-        this.loading = false
+        this.showCollapseCameraOverlay = false
         return
       }
 
@@ -198,8 +209,8 @@ export default {
       }
 
       setTimeout(() => {
-        this.loading = false
-      }, 2000)
+        this.showCollapseCameraOverlay = false
+      }, 5000)
     },
     onClickTestButton: async function () {
       console.info('test')
