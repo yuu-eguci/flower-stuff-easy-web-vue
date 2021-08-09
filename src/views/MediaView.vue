@@ -111,18 +111,6 @@
         </div>
       </b-card>
     </b-collapse>
-    <b-card
-      no-body
-      class="m-3 p-3"
-    >
-      <b-button
-        variant="outline-secondary"
-        size="sm"
-        @click="onClickTestButton"
-      >
-        Test
-      </b-button>
-    </b-card>
   </div>
 </template>
 
@@ -273,19 +261,6 @@ export default {
       setTimeout(() => {
         this.showCollapseCamera = true
       }, 3000)
-    },
-    onClickTestButton: async function () {
-      console.info('test')
-      if (this.showCollapseCamera) {
-        stopStream(this.cameraStream)
-        this.cameraStream = null
-        this.showCollapseCamera = false
-      } else {
-        this.cameraStream = await startStream()
-        setTimeout(() => {
-          this.showCollapseCamera = true
-        }, 3000)
-      }
     }
   }
 }
