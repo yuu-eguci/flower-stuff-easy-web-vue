@@ -1,60 +1,56 @@
 <template>
   <div>
+    <!--
+      カメラ映像を流す video 要素です。
+      NOTE: autoplay playsinline は iOS で動作させるため必要です。
+            webkit style は左右反転表示です。
+    -->
+    <video
+      v-if="modalStream"
+      ref="video"
+      :srcObject.prop="modalStream"
+      autoplay
+      playsinline
+      class="w-100"
+      style="-webkit-transform: scaleX(-1)"
+    />
+    <b-icon
+      v-else
+      icon="camera-video"
+      animation="cylon-vertical"
+      font-scale="2"
+    />
     <div
-      style="height: 200px;"
+      class="m-3"
     >
-      <!--
-        カメラ映像を流す video 要素です。
-        NOTE: autoplay playsinline は iOS で動作させるため必要です。
-              webkit style は左右反転表示です。
-      -->
-      <video
-        v-if="modalStream"
-        ref="video"
-        :srcObject.prop="modalStream"
-        autoplay
-        playsinline
-        class="w-100"
-        style="-webkit-transform: scaleX(-1)"
-      />
-      <b-icon
-        v-else
-        icon="camera-video"
-        animation="cylon-vertical"
-        font-scale="2"
-      />
-      <div
-        class="m-3"
-      >
-        <b-button
-          variant="primary"
-          block
-          :disabled="loading"
-          @click="onClickPredictButton"
-        >
-          <b-icon
-            v-if="loading"
-            icon="arrow-clockwise"
-            animation="spin"
-          />
-          <b-icon
-            v-else
-            icon="cloud-upload"
-          />
-          Predict
-        </b-button>
-      </div>
-      <b-alert
-        show
-        class="m-3"
+      <b-button
+        variant="primary"
+        block
+        :disabled="loading"
+        @click="onClickPredictButton"
       >
         <b-icon
-          icon="hand-index"
+          v-if="loading"
+          icon="arrow-clockwise"
+          animation="spin"
         />
-        Capture a flower on the camera. Then tap the Predict button.
-        The photos will be sent to the server, but won't be saved.
-      </b-alert>
+        <b-icon
+          v-else
+          icon="cloud-upload"
+        />
+        Predict
+      </b-button>
     </div>
+    <b-alert
+      show
+      class="m-3"
+    >
+      <b-icon
+        icon="hand-index"
+      />
+      Capture a flower on the camera. Then tap the Predict button.
+      The photos will be sent to the server, but won't be saved.
+    </b-alert>
   </div>
 </template>
 
