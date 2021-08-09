@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-if="!showCollapseCamera"
+      v-if="showStartingMessage"
       class="text-center"
     >
       <b-icon
@@ -9,7 +9,7 @@
         animation="cylon"
         font-scale="2"
       />
-      Starting...
+      Starting ...
     </div>
     <b-collapse
       v-model="showCollapseCamera"
@@ -159,6 +159,7 @@ export default {
   },
   data () {
     return {
+      showStartingMessage: true,
       cameraStream: null,
       showCollapseCameraOverlay: false,
       showCollapseCamera: false,
@@ -181,6 +182,7 @@ export default {
     //       :srcObject.prop を利用して指定しています。
     this.cameraStream = stream
     setTimeout(() => {
+      this.showStartingMessage = false
       this.showCollapseCamera = true
     }, 2000)
   },
@@ -210,6 +212,10 @@ export default {
 
       setTimeout(() => {
         this.showCollapseCameraOverlay = false
+        // カメラ停止、カメラエリアを閉じて、予測結果エリアを開きます。
+        stopStream(this.cameraStream)
+        this.cameraStream = null
+        this.showCollapseCamera = false
       }, 5000)
     },
     onClickTestButton: async function () {
