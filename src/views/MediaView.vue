@@ -70,6 +70,55 @@
         </template>
       </b-overlay>
     </b-collapse>
+    <b-collapse
+      v-model="showCollapsePredictionResult"
+    >
+      <b-card
+        :img-src="imgSrcBase64"
+        img-top
+        class="m-3"
+        title="Prediction result"
+      >
+        <b-list-group flush>
+          <b-list-group-item>
+            {{ predictionResult0Name }}: {{ predictionResult0Confidence }}<br>
+            <b-link
+              :href="`https://www.google.com/search?q=${predictionResult0Name}+flower&tbm=isch`"
+              target="_blank"
+            >
+              <b-icon
+                icon="search"
+              />
+              (Google)
+            </b-link>
+          </b-list-group-item>
+          <b-list-group-item>
+            {{ predictionResult1Name }}: {{ predictionResult1Confidence }}<br>
+            <b-link
+              :href="`https://www.google.com/search?q=${predictionResult1Name}+flower&tbm=isch`"
+              target="_blank"
+            >
+              <b-icon
+                icon="search"
+              />
+              (Google)
+            </b-link>
+          </b-list-group-item>
+          <b-list-group-item>
+            {{ predictionResult2Name }}: {{ predictionResult2Confidence }}<br>
+            <b-link
+              :href="`https://www.google.com/search?q=${predictionResult2Name}+flower&tbm=isch`"
+              target="_blank"
+            >
+              <b-icon
+                icon="search"
+              />
+              (Google)
+            </b-link>
+          </b-list-group-item>
+        </b-list-group>
+      </b-card>
+    </b-collapse>
     <b-card
       no-body
       class="m-3 p-3"
@@ -163,7 +212,14 @@ export default {
       cameraStream: null,
       showCollapseCameraOverlay: false,
       showCollapseCamera: false,
-      predictionResult: null
+      showCollapsePredictionResult: false,
+      imgSrcBase64: '',
+      predictionResult0Name: '',
+      predictionResult0Confidence: '',
+      predictionResult1Name: '',
+      predictionResult1Confidence: '',
+      predictionResult2Name: '',
+      predictionResult2Confidence: ''
     }
   },
   // NOTE: 定数のように利用する変数、 props から算出できる値は computed に定義するよう心がけます。
@@ -192,16 +248,16 @@ export default {
       this.showCollapseCameraOverlay = true
 
       // 画像を base64 で取得します。
-      const base64Image = getVideoFrameAsBase64(this.$refs.video)
+      this.imgSrcBase64 = getVideoFrameAsBase64(this.$refs.video)
       // 画像が存在しなければ処理を続ける理由はありません。
-      if (!base64Image) {
+      if (!this.imgSrcBase64) {
         this.showCollapseCameraOverlay = false
         return
       }
 
       // TODO: 画像を API へ送信。
       //       Prediction 結果が返ってくるハズ。
-      this.predictionResult = {
+      const predictionResult = {
         result: [
           { name: 'Windflower', confidence: 0.6562319 },
           { name: 'Pansy', confidence: 0.16973963 },
@@ -209,6 +265,12 @@ export default {
         ],
         otherParameter: 'foo'
       }
+      this.predictionResult0Name = predictionResult.result[0].name
+      this.predictionResult1Name = predictionResult.result[1].name
+      this.predictionResult2Name = predictionResult.result[2].name
+      this.predictionResult0Confidence = predictionResult.result[0].confidence
+      this.predictionResult1Confidence = predictionResult.result[1].confidence
+      this.predictionResult2Confidence = predictionResult.result[2].confidence
 
       setTimeout(() => {
         this.showCollapseCameraOverlay = false
@@ -216,6 +278,7 @@ export default {
         stopStream(this.cameraStream)
         this.cameraStream = null
         this.showCollapseCamera = false
+        this.showCollapsePredictionResult = true
       }, 5000)
     },
     onClickTestButton: async function () {
