@@ -114,6 +114,34 @@ const startStream = async function () {
   }
 }
 
+// video タグから画像を取得します。
+const getVideoFrameAsBase64 = function (videoElement) {
+  // 各要素です。
+  const canvasElement = document.createElement('canvas')
+
+  // video が生成されていなければ終了です。
+  // NOTE: video が表示される前にボタンを押したりすると状況が発生します。
+  if (!videoElement) {
+    return
+  }
+
+  // video の大きさを取得します。
+  const videoWidth = videoElement.offsetWidth * 0.5
+  const videoHeight = videoElement.offsetHeight * 0.5
+
+  // canvas の大きさを video と合わせます。
+  canvasElement.setAttribute('width', videoWidth)
+  canvasElement.setAttribute('height', videoHeight)
+
+  // video -> canvas 書き出します。
+  canvasElement.getContext('2d').drawImage(videoElement, 0, 0, videoWidth, videoHeight)
+
+  // base64 に変換します。
+  const base64Image = canvasElement.toDataURL('image/jpg')
+
+  return base64Image
+}
+
 export default {
   name: 'MediaView',
   components: {
@@ -122,7 +150,8 @@ export default {
     return {
       cameraStream: null,
       loading: false,
-      showCollapseCamera: false
+      showCollapseCamera: false,
+      predictionResult: null
     }
   },
   // NOTE: 定数のように利用する変数、 props から算出できる値は computed に定義するよう心がけます。
@@ -148,6 +177,26 @@ export default {
   methods: {
     onClickPredictButton: async function () {
       this.loading = true
+
+      // 画像を base64 で取得します。
+      const base64Image = getVideoFrameAsBase64(this.$refs.video)
+      // 画像が存在しなければ処理を続ける理由はありません。
+      if (!base64Image) {
+        this.loading = false
+        return
+      }
+
+      // TODO: 画像を API へ送信。
+      //       Prediction 結果が返ってくるハズ。
+      this.predictionResult = {
+        result: [
+          { name: 'Windflower', confidence: 0.6562319 },
+          { name: 'Pansy', confidence: 0.16973963 },
+          { name: 'Snowdrop', confidence: 0.119459644 }
+        ],
+        otherParameter: 'foo'
+      }
+
       setTimeout(() => {
         this.loading = false
       }, 2000)
