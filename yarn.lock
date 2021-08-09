@@ -9184,6 +9184,13 @@ vue-loader@^15.9.2:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-pincode-input@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/vue-pincode-input/-/vue-pincode-input-0.4.0.tgz#9f4f162e2171ff268cd146570520f8d48d5e14fb"
+  integrity sha512-A1DtG9J+o5AhdxRcgmuW8xxh7w5+GGVd6Di1J3n12xI99qSyKm9kBNJx4AzrNDgzr2TwUbleAdw7YTy3B68ohQ==
+  dependencies:
+    core-js "^2.6.5"
+
 vue-router@^3.2.0:
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.5.2.tgz#5f55e3f251970e36c3e8d88a7cd2d67a350ade5c"
