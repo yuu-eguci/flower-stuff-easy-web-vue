@@ -51,6 +51,18 @@
       Capture a flower on the camera. Then tap the Predict button.
       The photos will be sent to the server, but won't be saved.
     </b-alert>
+    <b-card
+      no-body
+      class="m-3 p-3"
+    >
+      <b-button
+        variant="outline-secondary"
+        size="sm"
+        @click="onClickTestButton"
+      >
+        Test
+      </b-button>
+    </b-card>
   </div>
 </template>
 
@@ -109,6 +121,9 @@ export default {
       setTimeout(() => {
         this.loading = false
       }, 2000)
+    },
+    onClickTestButton: async function () {
+      console.info('test')
     }
   }
 }
