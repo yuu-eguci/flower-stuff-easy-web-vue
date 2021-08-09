@@ -1,16 +1,28 @@
 <template>
   <div>
     <div
-      v-if="showStartingMessage"
-      class="text-center"
+      v-if="showCameraIsStartingMessage"
+      style="height: 200px; background-color: red;"
     >
-      <b-icon
-        icon="camera-video"
-        animation="cylon"
-        font-scale="2"
-      />
-      Starting ...
+      <b-overlay
+        :show="true"
+        no-wrap
+      >
+        <template #overlay>
+          <div class="text-center">
+            <b-icon
+              icon="camera-video"
+              scale="2"
+              animation="fade"
+            />
+          </div>
+          <div>
+            Camera is starting ...
+          </div>
+        </template>
+      </b-overlay>
     </div>
+
     <b-collapse
       v-model="showCollapseCamera"
     >
@@ -70,6 +82,7 @@
         </template>
       </b-overlay>
     </b-collapse>
+
     <b-collapse
       v-model="showCollapsePredictionResult"
     >
@@ -188,7 +201,7 @@ export default {
   },
   data () {
     return {
-      showStartingMessage: true,
+      showCameraIsStartingMessage: true,
       cameraStream: null,
       showCollapseCameraOverlay: false,
       showCollapseCamera: false,
@@ -213,9 +226,9 @@ export default {
     //       :srcObject.prop を利用して指定しています。
     this.cameraStream = stream
     setTimeout(() => {
-      this.showStartingMessage = false
+      this.showCameraIsStartingMessage = false
       this.showCollapseCamera = true
-    }, 2000)
+    }, 5000)
   },
   // NOTE: 「methods に含めるのは template から利用する method のみ」原則を心がけます。
   methods: {
