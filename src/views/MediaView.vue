@@ -21,7 +21,7 @@
       -->
       <video
         ref="video"
-        :srcObject.prop="modalStream"
+        :srcObject.prop="cameraStream"
         autoplay
         playsinline
         class="w-100"
@@ -75,13 +75,52 @@
 </template>
 
 <script>
+// Stream を指定してカメラを stop します。
+const stopStream = function (stream) {
+  const tracks = stream.getTracks()
+  tracks.forEach(function (track) {
+    track.stop()
+  })
+}
+
+// カメラを起動し、ストリームを返り値に得ます。
+const startStream = async function () {
+  // WARN: 環境によっては navigator.mediaDevices が存在しません。
+  try {
+    // カメラ映像をモーダルに表示するための機能(aspectRatio width height facingMode あたり)がサポートされているかどうか確認します。
+    const supportedConstraints = navigator.mediaDevices.getSupportedConstraints()
+    if (!(supportedConstraints.aspectRatio &&
+          supportedConstraints.width &&
+          supportedConstraints.height &&
+          supportedConstraints.facingMode)) {
+      return false
+    }
+
+    // NOTE: getUserMedia のコール時にユーザへのカメラ使用是非を問います。
+    return await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: {
+        // NOTE: 一部の iOS Safari でのみ確認している問題ですが、
+        //       aspectRatio 等の指定があると facingMode が勝手に environment へ変更される問題があります。
+        // aspectRatio: 1.777777,
+        // width: {min: 640, max: 1920},
+        // height: {min: 360, max: 1080},
+        facingMode: 'environment' // user: front camera, environment: rear camera
+      }
+    })
+  } catch (err) {
+    console.info({ err })
+    return null
+  }
+}
+
 export default {
   name: 'MediaView',
   components: {
   },
   data () {
     return {
-      modalStream: null,
+      cameraStream: null,
       loading: false,
       showCollapseCamera: false
     }
@@ -92,39 +131,18 @@ export default {
   watch: {
   },
   async mounted () {
-    // 環境によっては navigator.mediaDevices が存在しません。
-    // TypeError が発生したら同じく catch へ移動します。
-    try {
-      // カメラ映像をモーダルに表示するための機能(aspectRatio width height facingMode あたり)がサポートされているかどうか確認します。
-      const supportedConstraints = navigator.mediaDevices.getSupportedConstraints()
-      if (!(supportedConstraints.aspectRatio &&
-            supportedConstraints.width &&
-            supportedConstraints.height &&
-            supportedConstraints.facingMode)) {
-        return false
-      }
-
-      // カメラ映像を video#player へ流します。
-      // NOTE: getUserMedia のコール時にユーザへのカメラ使用是非を問います。
-      //       ここで video#player.srcObject に stream を指定するのが普通だが、この時点では DOM が非表示で指定できません。
-      //       :srcObject.prop を利用して指定しています。
-      this.modalStream = await navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: {
-          // NOTE: 一部の iOS Safari でのみ確認している問題ですが、
-          //       aspectRatio 等の指定があると facingMode が勝手に environment へ変更される問題があります。
-          // aspectRatio: 1.777777,
-          // width: {min: 640, max: 1920},
-          // height: {min: 360, max: 1080},
-          facingMode: 'environment' // user: front camera, environment: rear camera
-        }
-      })
-      setTimeout(() => {
-        this.showCollapseCamera = true
-      }, 3000)
-    } catch (err) {
-      console.info({ err })
+    // カメラを起動します。
+    const stream = await startStream()
+    // TODO: カメラがうまく起動できなかったときの処理。
+    if (!stream) {
+      return
     }
+    // NOTE: ここで video#player.srcObject に stream を指定するのが普通だが、この時点では DOM が非表示で指定できません。
+    //       :srcObject.prop を利用して指定しています。
+    this.cameraStream = stream
+    setTimeout(() => {
+      this.showCollapseCamera = true
+    }, 3000)
   },
   // NOTE: 「methods に含めるのは template から利用する method のみ」原則を心がけます。
   methods: {
@@ -136,7 +154,16 @@ export default {
     },
     onClickTestButton: async function () {
       console.info('test')
-      this.showCollapseCamera = !this.showCollapseCamera
+      if (this.showCollapseCamera) {
+        stopStream(this.cameraStream)
+        this.cameraStream = null
+        this.showCollapseCamera = false
+      } else {
+        this.cameraStream = await startStream()
+        setTimeout(() => {
+          this.showCollapseCamera = true
+        }, 3000)
+      }
     }
   }
 }
