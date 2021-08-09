@@ -22,51 +22,33 @@
         </div>
       </template>
       <hr class="my-4">
+      <p class="text-center">
+        <PincodeInput
+          v-model="pincode"
+          placeholder="0"
+          :length="4"
+          :autofocus="true"
+        />
+      </p>
       <p>
-        ここに pin code form の予定。
-        <b-form inline>
-          <b-form-input
-            ref="focusThis"
-            v-model="invitationCodeChar1"
-            :disabled="loading"
-            placeholder="0"
-            size="lg"
-          />
-          <b-form-input
-            v-model="invitationCodeChar2"
-            :disabled="loading"
-            placeholder="0"
-            size="lg"
-          />
-          <b-form-input
-            v-model="invitationCodeChar3"
-            :disabled="loading"
-            placeholder="0"
-            size="lg"
-          />
-          <b-form-input
-            v-model="invitationCodeChar4"
-            :disabled="loading"
-            placeholder="0"
-            size="lg"
-          />
-        </b-form>
+        Flower Stuff Lab EASY WEB | Enter your pin code above.
       </p>
     </b-jumbotron>
   </div>
 </template>
 
 <script>
+import PincodeInput from 'vue-pincode-input'
+
 export default {
   name: 'SignInView',
   components: {
+    PincodeInput
   },
   data () {
     return {
-      invitationCodeChar1: '',
-      invitationCodeChar2: '',
-      invitationCodeChar3: '',
-      invitationCodeChar4: '',
+      // 外部モジュール vue-pincode-input によって取得します。
+      pincode: '',
 
       // 演出のための data です。
       loading: false,
@@ -74,8 +56,22 @@ export default {
       locked: true
     }
   },
+  // NOTE: 定数のように利用する変数、 props から算出できる値は computed に定義するよう心がけます。
+  computed: {
+  },
+  watch: {
+    pincode: function (val) {
+      // 有効とみなすのは、4桁の入力のみです。
+      if (val.length !== 4) {
+        return
+      }
+      console.info({ pincode: val })
+    }
+  },
   async mounted () {
-    this.$refs.focusThis.focus()
+  },
+  // NOTE: 「methods に含めるのは template から利用する method のみ」原則を心がけます。
+  methods: {
   }
 }
 </script>
