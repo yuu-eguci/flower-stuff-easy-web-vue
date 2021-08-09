@@ -245,11 +245,14 @@ export default {
       setTimeout(() => {
         this.showCollapseCameraOverlay = false
         // カメラ停止、カメラエリアを閉じて、予測結果エリアを開きます。
-        // FIXME: このときカメラが停止していない。
         stopStream(this.cameraStream)
         this.cameraStream = null
         this.showCollapseCamera = false
-        this.showCollapsePredictionResult = true
+        // NOTE: ふたつの collapse がほぼ同時に開閉すると美しくなかったので、
+        //       順繰りに動作するようにしています。
+        setTimeout(() => {
+          this.showCollapsePredictionResult = true
+        }, 500)
       }, 5000)
     },
     onClickBackButton: async function () {
