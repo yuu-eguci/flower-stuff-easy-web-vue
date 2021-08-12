@@ -74,7 +74,7 @@
       </b-overlay>
       <div
         class="text-center"
-        style="height: 200px;"
+        style="height: 300px;"
       >
         <!--
           カメラ映像を流す video 要素です。
