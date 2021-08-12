@@ -120,6 +120,7 @@
         img-top
         class="m-3"
         title="Prediction result"
+        :sub-title="`v${predictionVersion}`"
       >
         <b-list-group flush>
           <b-list-group-item
@@ -237,7 +238,8 @@ export default {
       showCollapseCamera: false,
       showCollapsePredictionResult: false,
       imgSrcBase64: '',
-      predictionResults: []
+      predictionResults: [],
+      predictionVersion: ''
     }
   },
   // NOTE: 定数のように利用する変数、 props から算出できる値は computed に定義するよう心がけます。
@@ -285,9 +287,10 @@ export default {
           { name: 'Pansy', confidence: 0.16973963 },
           { name: 'Snowdrop', confidence: 0.119459644 }
         ],
-        otherParameter: 'foo'
+        version: '0.0.0'
       }
       this.predictionResults = predictionResult.result
+      this.predictionVersion = predictionResult.version
 
       setTimeout(() => {
         this.showCollapseCameraOverlay = false
@@ -308,6 +311,7 @@ export default {
       this.showCollapsePredictionResult = false
       this.imgSrcBase64 = ''
       this.predictionResults = []
+      this.predictionVersion = ''
       this.cameraStream = await startStream()
       setTimeout(() => {
         this.showCameraIsStartingMessage = false
