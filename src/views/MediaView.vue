@@ -29,6 +29,28 @@
       </b-overlay>
     </div>
 
+    <b-alert
+      :show="showCameraIsUnavailableMessage"
+      variant="warning"
+      class="m-3"
+    >
+      <b-icon
+        icon="camera-video-off"
+      />
+      This application needs to access your camera.
+      <b-button
+        variant="warning"
+        block
+        class="mt-3"
+        @click="onClickSignOutButton"
+      >
+        <b-icon
+          icon="door-open"
+        />
+        Sign out
+      </b-button>
+    </b-alert>
+
     <b-collapse
       v-model="showCollapseCamera"
       class="position-relative"
@@ -209,6 +231,7 @@ export default {
   data () {
     return {
       showCameraIsStartingMessage: true,
+      showCameraIsUnavailableMessage: false,
       cameraStream: null,
       showCollapseCameraOverlay: false,
       showCollapseCamera: false,
@@ -225,8 +248,12 @@ export default {
   async mounted () {
     // カメラを起動します。
     const stream = await startStream()
-    // TODO: カメラがうまく起動できなかったときの処理。
+    // カメラがうまく起動できなかったときの処理です。
     if (!stream) {
+      setTimeout(() => {
+        this.showCameraIsUnavailableMessage = true
+        this.showCameraIsStartingMessage = false
+      }, 1000)
       return
     }
     // NOTE: ここで video#player.srcObject に stream を指定するのが普通だが、この時点では DOM が非表示で指定できません。
@@ -286,6 +313,9 @@ export default {
         this.showCameraIsStartingMessage = false
         this.showCollapseCamera = true
       }, 3000)
+    },
+    onClickSignOutButton: function () {
+      this.$router.push({ path: '/' })
     }
   }
 }
