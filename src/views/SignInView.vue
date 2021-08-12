@@ -49,6 +49,7 @@
 
 <script>
 import PincodeInput from 'vue-pincode-input'
+import pnotifyUtils from '@/utils/pnotifyUtils'
 
 const TEMPORARY_CORRECT_PINCODE = '1234'
 
@@ -67,8 +68,7 @@ const animateAndGoToMediaView = function (component) {
   setTimeout(() => {
     component.showJumbotronOverlay = false
     component.locked = false
-
-    console.info('TODO: Pincode was accepted.')
+    pnotifyUtils.popHidingSuccess('Pincode was accepted.')
 
     // アンロックアイコンを見せたあと、遷移します。
     setTimeout(() => {
@@ -109,8 +109,9 @@ export default {
       // pincode の検証を行います。正しい pincode であれば true が返ります。
       if (await verifyPincode(val)) {
         animateAndGoToMediaView(this)
+        return
       }
-      console.warn('TODO: Pincode was incorrect.')
+      pnotifyUtils.popHidingNotice('Pincode was incorrect.')
     }
   },
   async mounted () {
