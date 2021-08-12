@@ -68,7 +68,6 @@ const animateAndGoToMediaView = function (component) {
   setTimeout(() => {
     component.showJumbotronOverlay = false
     component.locked = false
-    pnotifyUtils.popHidingSuccess('Pincode was accepted.')
 
     // アンロックアイコンを見せたあと、遷移します。
     setTimeout(() => {
