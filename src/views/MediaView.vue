@@ -72,18 +72,23 @@
           </div>
         </template>
       </b-overlay>
-      <!--
-        カメラ映像を流す video 要素です。
-        NOTE: autoplay playsinline は iOS で動作させるため必要です。
-              webkit style は左右反転表示です。
-      -->
-      <video
-        ref="video"
-        :srcObject.prop="cameraStream"
-        autoplay
-        playsinline
-        class="mw-100 mh-100"
-      />
+      <div
+        class="text-center"
+        style="height: 200px;"
+      >
+        <!--
+          カメラ映像を流す video 要素です。
+          NOTE: autoplay playsinline は iOS で動作させるため必要です。
+                webkit style は左右反転表示です。
+        -->
+        <video
+          ref="video"
+          :srcObject.prop="cameraStream"
+          autoplay
+          playsinline
+          class="mw-100 mh-100"
+        />
+      </div>
       <div
         class="m-3"
       >
