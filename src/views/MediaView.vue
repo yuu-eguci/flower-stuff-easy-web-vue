@@ -1,8 +1,14 @@
 <template>
+  <!--
+    MediaView
+    撮影、予測結果の表示を行うメイン view です。
+  -->
   <div>
+    <!-- NOTE: position-relative は b-overlay no-wrap の動作に必須です。 -->
     <div
       v-if="showCameraIsStartingMessage"
-      style="height: 200px; background-color: red;"
+      class="position-relative"
+      style="height: 200px;"
     >
       <b-overlay
         :show="true"
@@ -25,6 +31,7 @@
 
     <b-collapse
       v-model="showCollapseCamera"
+      class="position-relative"
     >
       <!--
         カメラ映像を流す video 要素です。
