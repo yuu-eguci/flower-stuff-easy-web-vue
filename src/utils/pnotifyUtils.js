@@ -9,9 +9,11 @@ defaultModules.set(PNotifyFontAwesome5, {})
 
 // NOTE: Stack は毎回同じインスタンスを使わないといけない。通知ボックスが重なる不具合が起こります。
 const stackDownLeft = new Stack({
-  // Pnotify が下中央に出る設定です。
-  // NOTE: 上だと、スマホ + キーボードが出ているときに画面から隠れます。
-  dir1: 'up',
+  dir1: 'down',
+  dir2: 'left',
+  // NOTE: top に貼り付けすぎると、上だと、スマホ + キーボードが出ているときに画面から隠れます。
+  firstpos1: 100,
+  firstpos2: 5,
   modal: false,
   maxOpen: 3,
   maxStrategy: 'close',
