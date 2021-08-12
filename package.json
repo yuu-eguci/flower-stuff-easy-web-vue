@@ -10,6 +10,8 @@
     "lint": "vue-cli-service lint --no-fix"
   },
   "dependencies": {
+    "@pnotify/font-awesome5": "^5.2.0",
+    "@pnotify/font-awesome5-fix": "^5.2.0",
     "bootstrap": "4.5.3",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
