@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/flower-stuff-lab-easy-web/precache-manifest.3f8ce4e7fe4e5483e1ad389dbfcd657a.js"
+  "/flower-stuff-lab-easy-web/precache-manifest.731487831f8f31b24140f031d119043d.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "flower-stuff-lab-easy-web"});
