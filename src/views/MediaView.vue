@@ -33,6 +33,23 @@
       v-model="showCollapseCamera"
       class="position-relative"
     >
+      <b-overlay
+        :show="showCollapseCameraOverlay"
+        no-wrap
+      >
+        <template #overlay>
+          <div class="text-center">
+            <b-icon
+              icon="cloud-upload"
+              scale="2"
+              animation="fade"
+            />
+          </div>
+          <div>
+            Sending and predicting ...
+          </div>
+        </template>
+      </b-overlay>
       <!--
         カメラ映像を流す video 要素です。
         NOTE: autoplay playsinline は iOS で動作させるため必要です。
@@ -71,23 +88,6 @@
         Capture a flower on the camera. Then tap the Predict button.
         The photos will be sent to the server, but won't be saved.
       </b-alert>
-      <b-overlay
-        :show="showCollapseCameraOverlay"
-        no-wrap
-      >
-        <template #overlay>
-          <div class="text-center">
-            <b-icon
-              icon="cloud-upload"
-              scale="2"
-              animation="fade"
-            />
-          </div>
-          <div>
-            Sending and predicting ...
-          </div>
-        </template>
-      </b-overlay>
     </b-collapse>
 
     <b-collapse
