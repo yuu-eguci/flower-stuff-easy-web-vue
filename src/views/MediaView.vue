@@ -83,7 +83,6 @@
         autoplay
         playsinline
         class="w-100"
-        style="-webkit-transform: scaleX(-1)"
       />
       <div
         class="m-3"
