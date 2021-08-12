@@ -1,5 +1,9 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
+    "revision": "fa80ce4dacfc9e2e5834f3a0e8ca2830",
+    "url": "/flower-stuff-lab-easy-web/404.html"
+  },
+  {
     "revision": "71e4f4c3c6a18eb2e18a",
     "url": "/flower-stuff-lab-easy-web/css/chunk-vendors.ce7e7f47.css"
   },
