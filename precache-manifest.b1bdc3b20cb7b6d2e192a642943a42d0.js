@@ -8,12 +8,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/flower-stuff-lab-easy-web/css/chunk-vendors.ce7e7f47.css"
   },
   {
-    "revision": "fec81f8cb8ed1ed2af9256dac93165b5",
+    "revision": "060e9e8cd7cd770ba8eff024e62df050",
     "url": "/flower-stuff-lab-easy-web/index.html"
   },
   {
-    "revision": "605a2dd702302fb6cf4f",
-    "url": "/flower-stuff-lab-easy-web/js/app.e872b74e.js"
+    "revision": "af62eebe4c47eec7254a",
+    "url": "/flower-stuff-lab-easy-web/js/app.74c5ab95.js"
   },
   {
     "revision": "71e4f4c3c6a18eb2e18a",
