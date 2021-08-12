@@ -1,8 +1,14 @@
 <template>
+  <!--
+    SignInView
+    最初にやってくる、サインイン用のページです。
+  -->
   <div>
+    <!-- NOTE: position-relative は b-overlay no-wrap の動作に必須です。 -->
     <b-jumbotron
       :bg-variant="locked ? 'info' : 'success'"
       text-variant="light"
+      class="position-relative"
     >
       <template #header>
         <div class="text-center">
@@ -33,12 +39,43 @@
       <p>
         Flower Stuff Lab EASY WEB | Enter your pin code above.
       </p>
+      <b-overlay
+        :show="showJumbotronOverlay"
+        no-wrap
+      />
     </b-jumbotron>
   </div>
 </template>
 
 <script>
 import PincodeInput from 'vue-pincode-input'
+
+const TEMPORARY_CORRECT_PINCODE = '1234'
+
+// Pincode を検証し、正しい pincode であれば true を返します。
+const verifyPincode = async function (pincode) {
+  return pincode === TEMPORARY_CORRECT_PINCODE
+}
+
+// アイコンを揺らし、ページ遷移を行います。
+// NOTE: 演出のための処理です。
+const animateAndGoToMediaView = function (component) {
+  component.showJumbotronOverlay = true
+  // ロック状態のアイコンを揺らします。
+  component.iconAnimation = 'cylon'
+  // ロックアイコン -> アンロックアイコンにチェンジ。
+  setTimeout(() => {
+    component.showJumbotronOverlay = false
+    component.locked = false
+
+    console.info('TODO: Pincode was accepted.')
+
+    // アンロックアイコンを見せたあと、遷移します。
+    setTimeout(() => {
+      component.$router.push({ path: '/media' })
+    }, 1500)
+  }, 1500)
+}
 
 export default {
   name: 'SignInView',
@@ -51,7 +88,7 @@ export default {
       pincode: '',
 
       // 演出のための data です。
-      loading: false,
+      showJumbotronOverlay: false,
       iconAnimation: 'fade',
       locked: true
     }
@@ -60,12 +97,20 @@ export default {
   computed: {
   },
   watch: {
-    pincode: function (val) {
+    pincode: async function (val) {
       // 有効とみなすのは、4桁の入力のみです。
       if (val.length !== 4) {
         return
       }
-      console.info({ pincode: val })
+      // 検証するのは locked 状態のときのみです。
+      if (!this.locked) {
+        return
+      }
+      // pincode の検証を行います。正しい pincode であれば true が返ります。
+      if (await verifyPincode(val)) {
+        animateAndGoToMediaView(this)
+      }
+      console.warn('TODO: Pincode was incorrect.')
     }
   },
   async mounted () {
