@@ -82,7 +82,7 @@
         :srcObject.prop="cameraStream"
         autoplay
         playsinline
-        class="w-100"
+        class="mw-100 mh-100"
       />
       <div
         class="m-3"
