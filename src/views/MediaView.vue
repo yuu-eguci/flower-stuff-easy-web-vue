@@ -277,11 +277,13 @@ export default {
     },
     onClickBackButton: async function () {
       // 予測結果エリアの data 変数を初期化して、カメラエリアを再び開きます。
+      this.showCameraIsStartingMessage = true
       this.showCollapsePredictionResult = false
       this.imgSrcBase64 = ''
       this.predictionResults = []
       this.cameraStream = await startStream()
       setTimeout(() => {
+        this.showCameraIsStartingMessage = false
         this.showCollapseCamera = true
       }, 3000)
     }
