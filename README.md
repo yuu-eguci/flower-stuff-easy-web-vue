@@ -1,4 +1,4 @@
-# flower-stuff-lab-easy-web
+# flower-stuff-easy-web-vue
 
 ## Project setup
 ```

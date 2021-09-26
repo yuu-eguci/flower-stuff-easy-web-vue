@@ -19,7 +19,7 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: '/flower-stuff-lab-easy-web/',
+  base: '/flower-stuff-easy-web-vue/',
   routes
 })
 
