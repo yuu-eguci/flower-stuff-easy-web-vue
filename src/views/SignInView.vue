@@ -50,13 +50,7 @@
 <script>
 import PincodeInput from 'vue-pincode-input'
 import pnotifyUtils from '@/utils/pnotifyUtils'
-
-const TEMPORARY_CORRECT_PINCODE = '1234'
-
-// Pincode を検証し、正しい pincode であれば true を返します。
-const verifyPincode = async function (pincode) {
-  return pincode === TEMPORARY_CORRECT_PINCODE
-}
+import { getStatus, verifyPincode } from '@/api'
 
 // アイコンを揺らし、ページ遷移を行います。
 // NOTE: 演出のための処理です。
@@ -87,7 +81,7 @@ export default {
       pincode: '',
 
       // 演出のための data です。
-      showJumbotronOverlay: false,
+      showJumbotronOverlay: true,
       iconAnimation: 'fade',
       locked: true
     }
@@ -105,16 +99,29 @@ export default {
       if (!this.locked) {
         return
       }
-      // pincode の検証を行います。正しい pincode であれば true が返ります。
-      if (await verifyPincode(val)) {
+      // pincode の検証を行います。
+      const result = await verifyPincode(val)
+      // message が入っているとき、エラーが発生しています。
+      if ('message' in result) {
+        pnotifyUtils.popHidingError(result.message)
+        return
+      }
+      const verificationSucceeded = result.verification_succeeded
+      if (verificationSucceeded) {
         animateAndGoToMediaView(this)
         return
       }
-      pnotifyUtils.popHidingNotice('Pincode was incorrect.')
+      pnotifyUtils.popHidingError('Invalid pincode.')
     }
   },
   async mounted () {
-    // TODO: Heroku にせよ App Service にせよ、一度疎通確認をする。
+    // サーバ側が準備万端であることを確認します。
+    const serverIsReady = (await getStatus()).ready
+    if (serverIsReady) {
+      this.showJumbotronOverlay = false
+      return
+    }
+    pnotifyUtils.popError('Sorry, the server is not ready.')
   },
   // NOTE: 「methods に含めるのは template から利用する method のみ」原則を心がけます。
   methods: {
