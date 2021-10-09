@@ -4,20 +4,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/flower-stuff-easy-web-vue/404.html"
   },
   {
-    "revision": "83a5769b56f6afca6c0a",
+    "revision": "aeca5fcf0063d6a92d4c",
     "url": "/flower-stuff-easy-web-vue/css/chunk-vendors.ce7e7f47.css"
   },
   {
-    "revision": "8d8aa046421f90a9b439186e262241f5",
+    "revision": "245aaf0e6414d97ac31f9715c6ba3351",
     "url": "/flower-stuff-easy-web-vue/index.html"
   },
   {
-    "revision": "6598163ff0c55a31cb13",
-    "url": "/flower-stuff-easy-web-vue/js/app.ed120acf.js"
+    "revision": "36367e6b64c2ca776938",
+    "url": "/flower-stuff-easy-web-vue/js/app.4e9abbaf.js"
   },
   {
-    "revision": "83a5769b56f6afca6c0a",
-    "url": "/flower-stuff-easy-web-vue/js/chunk-vendors.bf5870f9.js"
+    "revision": "aeca5fcf0063d6a92d4c",
+    "url": "/flower-stuff-easy-web-vue/js/chunk-vendors.6021f2fe.js"
   },
   {
     "revision": "9c99803ebc49f0c1cda7",

@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/flower-stuff-easy-web-vue/precache-manifest.fa7461d189c71948a01b2aecce938c78.js"
+  "/flower-stuff-easy-web-vue/precache-manifest.bbd855ae631059eb619632f24a7edf20.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "flower-stuff-easy-web-vue"});
