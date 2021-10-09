@@ -162,6 +162,9 @@
 </template>
 
 <script>
+import pnotifyUtils from '@/utils/pnotifyUtils'
+import { predictImage } from '@/api'
+
 // Stream を指定してカメラを stop します。
 const stopStream = function (stream) {
   const tracks = stream.getTracks()
@@ -224,7 +227,7 @@ const getVideoFrameAsBase64 = function (videoElement) {
   canvasElement.getContext('2d').drawImage(videoElement, 0, 0, videoWidth, videoHeight)
 
   // base64 に変換します。
-  const base64Image = canvasElement.toDataURL('image/jpg')
+  const base64Image = canvasElement.toDataURL('image/png')
 
   return base64Image
 }
@@ -283,18 +286,17 @@ export default {
         return
       }
 
-      // TODO: 画像を API へ送信。
-      //       Prediction 結果が返ってくるハズ。
-      const predictionResult = {
-        result: [
-          { name: 'Windflower', confidence: 0.6562319 },
-          { name: 'Pansy', confidence: 0.16973963 },
-          { name: 'Snowdrop', confidence: 0.119459644 }
-        ],
-        version: '0.0.0'
+      // 画像を API へ送信。
+      // Prediction 結果が返ってくるハズ。
+      const result = await predictImage(this.imgSrcBase64)
+      // message が入っているとき、エラーが発生しています。
+      if ('message' in result) {
+        pnotifyUtils.popHidingError(result.message)
+        this.showCollapseCameraOverlay = false
+        return
       }
-      this.predictionResults = predictionResult.result
-      this.predictionVersion = predictionResult.version
+      this.predictionResults = result.result
+      this.predictionVersion = result.hdf5_version
 
       setTimeout(() => {
         this.showCollapseCameraOverlay = false
