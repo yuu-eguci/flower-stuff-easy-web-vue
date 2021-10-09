@@ -14,10 +14,10 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/flower-stuff-lab-easy-web/precache-manifest.9a323635f09db634c097d2eae246180a.js"
+  "/flower-stuff-easy-web-vue/precache-manifest.fa7461d189c71948a01b2aecce938c78.js"
 );
 
-workbox.core.setCacheNameDetails({prefix: "flower-stuff-lab-easy-web"});
+workbox.core.setCacheNameDetails({prefix: "flower-stuff-easy-web-vue"});
 
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
