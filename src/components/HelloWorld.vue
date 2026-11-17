@@ -127,8 +127,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
   name: 'HelloWorld',
   props: {
     msg: {
@@ -137,7 +139,7 @@ export default {
       default: ''
     }
   }
-}
+})
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

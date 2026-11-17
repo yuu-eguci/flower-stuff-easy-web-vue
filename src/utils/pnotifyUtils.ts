@@ -1,4 +1,4 @@
-import { alert, Stack, defaultModules } from '@pnotify/core'
+import { alert, Stack, defaultModules, Notice, Options } from '@pnotify/core'
 import * as PNotifyFontAwesome5Fix from '@pnotify/font-awesome5-fix'
 import * as PNotifyFontAwesome5 from '@pnotify/font-awesome5'
 import '@pnotify/core/dist/PNotify.css'
@@ -22,7 +22,7 @@ const stackDownLeft = new Stack({
 
 export default {
 
-  __execPNotify: function (type, mes, hide) {
+  __execPNotify: function (type: Options['type'], mes: string, hide?: boolean): void {
     // hide の初期値は false です。
     hide = hide || false
 
@@ -42,39 +42,39 @@ export default {
     })
   },
 
-  popSuccess: function (mes) {
+  popSuccess: function (mes: string): void {
     this.__execPNotify('success', mes)
   },
 
-  popHidingSuccess: function (mes) {
+  popHidingSuccess: function (mes: string): void {
     this.__execPNotify('success', mes, /* hide = */ true)
   },
 
-  popError: function (mes) {
+  popError: function (mes: string): void {
     this.__execPNotify('error', mes)
   },
 
-  popHidingError: function (mes) {
+  popHidingError: function (mes: string): void {
     this.__execPNotify('error', mes, /* hide = */ true)
   },
 
-  popNotice: function (mes) {
+  popNotice: function (mes: string): void {
     this.__execPNotify('notice', mes)
   },
 
-  popHidingNotice: function (mes) {
+  popHidingNotice: function (mes: string): void {
     this.__execPNotify('notice', mes, /* hide = */ true)
   },
 
-  popInfo: function (mes) {
+  popInfo: function (mes: string): void {
     this.__execPNotify('info', mes)
   },
 
-  popHidingInfo: function (mes) {
+  popHidingInfo: function (mes: string): void {
     this.__execPNotify('info', mes, /* hide = */ true)
   },
 
-  createAnimateNoticeObject: function (mes) {
+  createAnimateNoticeObject: function (mes: string): Notice {
     return alert({
       type: 'notice',
       text: mes,
@@ -87,11 +87,11 @@ export default {
     })
   },
 
-  createAnimateNoticeIntervalObject: function (notifyObject, mes) {
+  createAnimateNoticeIntervalObject: function (notifyObject: Notice, mes: string): ReturnType<typeof setInterval> {
     // NOTE: 機能としては不要だが、演出のために実装している interval イベントです。
     const faClasses = ['spinner', 'circle-notch', 'atom', 'slash', 'sync']
     let i = 0
-    const options = {
+    const options: Options = {
       text: mes,
       textTrusted: true
     }
