@@ -1,13 +1,13 @@
 import { expect } from 'chai'
-import { AxiosRequestConfig, AxiosResponse } from 'axios'
+import { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
 import Api from '@/axios'
 
 // 実際の HTTP 通信を行わないよう、axios の adapter を差し替えます。
 const useFakeAdapter = function (
   api: Api,
-  respond: (config: AxiosRequestConfig) => Promise<AxiosResponse<unknown>>
-): AxiosRequestConfig[] {
-  const requests: AxiosRequestConfig[] = []
+  respond: (config: InternalAxiosRequestConfig) => Promise<AxiosResponse<unknown>>
+): InternalAxiosRequestConfig[] {
+  const requests: InternalAxiosRequestConfig[] = []
   api.instance.defaults.adapter = (config) => {
     requests.push(config)
     return respond(config)
@@ -15,7 +15,7 @@ const useFakeAdapter = function (
   return requests
 }
 
-const fakeResponse = function (config: AxiosRequestConfig, status: number, data: unknown): AxiosResponse<unknown> {
+const fakeResponse = function (config: InternalAxiosRequestConfig, status: number, data: unknown): AxiosResponse<unknown> {
   return { data, status, statusText: '', headers: { 'x-test': 'yes' }, config }
 }
 
