@@ -1,4 +1,4 @@
-# ci は lint と test を行います。
+# ci は lint, test, build を行います。
 # タイミングは main, dev 両ブランチへの push, pr です。
 
 name: ci
@@ -17,28 +17,28 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x, 16.x]
-
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v7
 
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v7
+      id: setup_node_id
       with:
-        node-version: ${{ matrix.node-version }}
+        # package.json の volta.node に書かれたバージョンを使います。
+        node-version-file: package.json
         # NOTE: cache option を使いません。
         #       actions/cache で node_modules をキャッシュしたほうが yarn install が高速で終わるためです。
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@v6
       id: node_modules_cache_id
       with:
         path: |
           node_modules
-        key: node-v${{ matrix.node-version }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
+        key: node-v${{ steps.setup_node_id.outputs.node-version }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
 
-    - run: yarn install
+    - run: yarn install --frozen-lockfile
 
     - run: yarn lint
 
     - run: yarn test:unit
+
+    - run: yarn build:production

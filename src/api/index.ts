@@ -15,7 +15,6 @@ export interface StatusResponse {
 }
 
 export interface VerifyPincodeResponse {
-  // eslint-disable-next-line camelcase
   verification_succeeded: boolean
 }
 
@@ -27,7 +26,6 @@ export interface PredictionResult {
 
 export interface PredictImageResponse {
   result: PredictionResult[]
-  // eslint-disable-next-line camelcase
   hdf5_version: string
 }
 

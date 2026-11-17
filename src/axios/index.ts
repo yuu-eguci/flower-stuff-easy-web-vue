@@ -7,13 +7,27 @@ export interface ProcessedResponse {
 }
 
 /**
+ * レスポンスヘッダを文字列値のオブジェクトへ変換
+ * axios 1.x のヘッダは AxiosHeaders インスタンスのため、値が存在するヘッダのみを取り出します。
+ */
+function toStringHeaders (headers: AxiosResponse['headers']): Record<string, string> {
+  const result: Record<string, string> = {}
+  for (const [key, value] of Object.entries(headers)) {
+    if (value !== undefined && value !== null) {
+      result[key] = String(value)
+    }
+  }
+  return result
+}
+
+/**
  * レスポンスデータの加工
  */
 function processResponse (response: AxiosResponse): ProcessedResponse {
   return {
     statusCode: response.status,
     body: response.data,
-    headers: response.headers
+    headers: toStringHeaders(response.headers)
   }
 }
 

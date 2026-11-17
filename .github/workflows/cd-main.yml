@@ -14,22 +14,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v7
 
-    # ここが @v1 だったり node-version: '10.x' だったりすると
-    # The engine "node" is incompatible with this module. エラーが発生して Actions が動かない。
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v7
+      id: setup_node_id
       with:
-        node-version: 16.x
+        # package.json の volta.node に書かれたバージョンを使います。
+        # engines.node の範囲外だと The engine "node" is incompatible with this module. エラーで yarn install が失敗します。
+        node-version-file: package.json
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@v6
       id: node_modules_cache_id
       with:
         path: |
           node_modules
-        key: node-v16.x-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
+        key: node-v${{ steps.setup_node_id.outputs.node-version }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
 
-    - run: yarn install
+    - run: yarn install --frozen-lockfile
+
+    # NOTE: build では lint が実行されないため、デプロイ前に実行します。
+    - run: yarn lint
 
     - run: yarn build:production
 
