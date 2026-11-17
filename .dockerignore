@@ -1,0 +1,16 @@
+# ビルドに必要なファイルだけをビルドコンテキストへ送ります。
+# .env.* ・ .git ・ node_modules ・ dist などはイメージに入れません。
+*
+!.browserslistrc
+!babel.config.js
+!eslint.config.mjs
+!package.json
+!tsconfig.json
+!vue.config.js
+!yarn.lock
+!docker/nginx.conf
+!public/
+!src/
+!tests/
+**/.env*
+**/.DS_Store

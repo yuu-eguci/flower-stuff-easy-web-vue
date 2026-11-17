@@ -1,4 +1,4 @@
-# ci は lint, test, build を行います。
+# ci は lint, test, build と、 Docker イメージのビルド・スモークテストを行います。
 # タイミングは main, dev 両ブランチへの push, pr です。
 
 name: ci
@@ -42,3 +42,24 @@ jobs:
     - run: yarn test:unit
 
     - run: yarn build:production
+
+  docker-build-and-smoke-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v7
+
+    # README の手順どおりにイメージをビルドし、 healthy になるまで待ちます。
+    - run: docker compose up -d --build --wait
+
+    - run: docker/smoke-test.sh
+
+    # README に書いた Docker での lint と unit test です。
+    - run: docker build --target check .
+
+    - if: failure()
+      run: docker compose logs
+
+    - if: always()
+      run: docker compose down --rmi local
