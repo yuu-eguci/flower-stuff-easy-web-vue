@@ -33,7 +33,7 @@ jobs:
       with:
         path: |
           node_modules
-        key: node-v${{ steps.setup_node_id.outputs.node-version }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
+        key: node-${{ steps.setup_node_id.outputs.node-version }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
 
     - run: yarn install --frozen-lockfile
 
