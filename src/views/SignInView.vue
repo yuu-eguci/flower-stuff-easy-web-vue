@@ -47,14 +47,22 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import PincodeInput from 'vue-pincode-input'
 import pnotifyUtils from '@/utils/pnotifyUtils'
 import { getStatus, verifyPincode } from '@/api'
 
+// animateAndGoToMediaView が操作する component です。
+type AnimatedComponent = Vue & {
+  showJumbotronOverlay: boolean
+  iconAnimation: string
+  locked: boolean
+}
+
 // アイコンを揺らし、ページ遷移を行います。
 // NOTE: 演出のための処理です。
-const animateAndGoToMediaView = function (component) {
+const animateAndGoToMediaView = function (component: AnimatedComponent) {
   component.showJumbotronOverlay = true
   // ロック状態のアイコンを揺らします。
   component.iconAnimation = 'cylon'
@@ -70,7 +78,7 @@ const animateAndGoToMediaView = function (component) {
   }, 1500)
 }
 
-export default {
+export default Vue.extend({
   name: 'SignInView',
   components: {
     PincodeInput
@@ -90,7 +98,7 @@ export default {
   computed: {
   },
   watch: {
-    pincode: async function (val) {
+    pincode: async function (val: string) {
       // 有効とみなすのは、4桁の入力のみです。
       if (val.length !== 4) {
         return
@@ -126,5 +134,5 @@ export default {
   // NOTE: 「methods に含めるのは template から利用する method のみ」原則を心がけます。
   methods: {
   }
-}
+})
 </script>

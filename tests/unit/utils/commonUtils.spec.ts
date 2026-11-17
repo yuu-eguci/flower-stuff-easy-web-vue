@@ -1,7 +1,7 @@
 import { expect } from 'chai'
-import commonUtils from '@/utils/commonUtils.js'
+import commonUtils from '@/utils/commonUtils'
 
-describe('tests/unit/utils/commonUtils.spec.js', () => {
+describe('tests/unit/utils/commonUtils.spec.ts', () => {
   describe('commonUtils.add', () => {
     it('should add successfully', () => {
       const actual = commonUtils.add(1, 2)

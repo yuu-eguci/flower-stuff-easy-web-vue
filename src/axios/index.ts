@@ -1,11 +1,17 @@
-import axios from 'axios'
+import axios, { AxiosInstance, AxiosResponse } from 'axios'
+
+export interface ProcessedResponse {
+  statusCode: number
+  body: unknown
+  headers: Record<string, string>
+}
 
 /**
  * レスポンスデータの加工
  */
-function processResponse (response) {
+function processResponse (response: AxiosResponse): ProcessedResponse {
   return {
-    statusCode: response.statusCode,
+    statusCode: response.status,
     body: response.data,
     headers: response.headers
   }
@@ -15,15 +21,15 @@ function processResponse (response) {
  * Http通信用クラス
  */
 export default class Api {
+  instance: AxiosInstance
+
   /**
    * Http通信を行うためのインスタンスを作成
    * APIが複数ある場合にも対応
-   * @param {string} baseUrl ベースURL
-   * @param {*} option オプションパラメーター
-   * @param {string} option.dataType Content-typeにあたるデータタイプ
-   * @param {string} option.headers デフォルトヘッダー情報
+   * @param baseUrl ベースURL
+   * @param headers デフォルトヘッダー情報
    */
-  constructor (baseUrl, headers) {
+  constructor (baseUrl: string | undefined, headers: Record<string, string>) {
     this.instance = axios.create({
       baseURL: baseUrl,
       headers
@@ -35,10 +41,10 @@ export default class Api {
 
   /**
    * getメソッドの呼び出し
-   * @param {string} url URLパス
-   * @param {object} query クエリデータ
+   * @param url URLパス
+   * @param params クエリデータ
    */
-  async get (url, params) {
+  async get (url: string, params?: Record<string, unknown>): Promise<ProcessedResponse> {
     const config = {
       params
     }
@@ -55,10 +61,10 @@ export default class Api {
   /**
    * postメソッド呼び出し
    * queryがないのはREST原則に則っているため
-   * @param {string} url URLパス
-   * @param {object} data リクエストボディ
+   * @param url URLパス
+   * @param data リクエストボディ
    */
-  async post (url, data) {
+  async post (url: string, data: unknown): Promise<ProcessedResponse> {
     const response = await this.instance.post(url, data).catch(err => {
       if (err.response === undefined) {
         // FIXME: Network Error のとき何を返り値にすればよいか分からない。

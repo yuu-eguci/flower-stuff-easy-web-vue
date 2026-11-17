@@ -28,9 +28,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         # NOTE: cache option を使いません。
-        #       actions/cache@v2 で node_modules をキャッシュしたほうが yarn install が高速で終わるためです。
+        #       actions/cache で node_modules をキャッシュしたほうが yarn install が高速で終わるためです。
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v4
       id: node_modules_cache_id
       with:
         path: |

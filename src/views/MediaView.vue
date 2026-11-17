@@ -161,12 +161,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import pnotifyUtils from '@/utils/pnotifyUtils'
-import { predictImage } from '@/api'
+import { predictImage, PredictionResult } from '@/api'
 
 // Stream を指定してカメラを stop します。
-const stopStream = function (stream) {
+const stopStream = function (stream: MediaStream) {
   const tracks = stream.getTracks()
   tracks.forEach(function (track) {
     track.stop()
@@ -174,7 +175,7 @@ const stopStream = function (stream) {
 }
 
 // カメラを起動し、ストリームを返り値に得ます。
-const startStream = async function () {
+const startStream = async function (): Promise<MediaStream | false | null> {
   // WARN: 環境によっては navigator.mediaDevices が存在しません。
   try {
     // カメラ映像をモーダルに表示するための機能(aspectRatio width height facingMode あたり)がサポートされているかどうか確認します。
@@ -205,7 +206,7 @@ const startStream = async function () {
 }
 
 // video タグから画像を取得します。
-const getVideoFrameAsBase64 = function (videoElement) {
+const getVideoFrameAsBase64 = function (videoElement: HTMLVideoElement | undefined) {
   // 各要素です。
   const canvasElement = document.createElement('canvas')
 
@@ -220,11 +221,12 @@ const getVideoFrameAsBase64 = function (videoElement) {
   const videoHeight = videoElement.offsetHeight * 0.5
 
   // canvas の大きさを video と合わせます。
-  canvasElement.setAttribute('width', videoWidth)
-  canvasElement.setAttribute('height', videoHeight)
+  canvasElement.setAttribute('width', String(videoWidth))
+  canvasElement.setAttribute('height', String(videoHeight))
 
   // video -> canvas 書き出します。
-  canvasElement.getContext('2d').drawImage(videoElement, 0, 0, videoWidth, videoHeight)
+  const context = canvasElement.getContext('2d') as CanvasRenderingContext2D
+  context.drawImage(videoElement, 0, 0, videoWidth, videoHeight)
 
   // base64 に変換します。
   const base64Image = canvasElement.toDataURL('image/png')
@@ -232,7 +234,7 @@ const getVideoFrameAsBase64 = function (videoElement) {
   return base64Image
 }
 
-export default {
+export default Vue.extend({
   name: 'MediaView',
   components: {
   },
@@ -240,12 +242,12 @@ export default {
     return {
       showCameraIsStartingMessage: true,
       showCameraIsUnavailableMessage: false,
-      cameraStream: null,
+      cameraStream: null as MediaStream | false | null,
       showCollapseCameraOverlay: false,
       showCollapseCamera: false,
       showCollapsePredictionResult: false,
-      imgSrcBase64: '',
-      predictionResults: [],
+      imgSrcBase64: '' as string | undefined,
+      predictionResults: [] as PredictionResult[],
       predictionVersion: ''
     }
   },
@@ -279,7 +281,7 @@ export default {
       this.showCollapseCameraOverlay = true
 
       // 画像を base64 で取得します。
-      this.imgSrcBase64 = getVideoFrameAsBase64(this.$refs.video)
+      this.imgSrcBase64 = getVideoFrameAsBase64(this.$refs.video as HTMLVideoElement | undefined)
       // 画像が存在しなければ処理を続ける理由はありません。
       if (!this.imgSrcBase64) {
         this.showCollapseCameraOverlay = false
@@ -301,7 +303,7 @@ export default {
       setTimeout(() => {
         this.showCollapseCameraOverlay = false
         // カメラ停止、カメラエリアを閉じて、予測結果エリアを開きます。
-        stopStream(this.cameraStream)
+        stopStream(this.cameraStream as MediaStream)
         this.cameraStream = null
         this.showCollapseCamera = false
         // NOTE: ふたつの collapse がほぼ同時に開閉すると美しくなかったので、
@@ -328,5 +330,5 @@ export default {
       this.$router.push({ path: '/' })
     }
   }
-}
+})
 </script>
